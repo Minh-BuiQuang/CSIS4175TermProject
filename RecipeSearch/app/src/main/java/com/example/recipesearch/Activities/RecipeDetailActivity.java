@@ -9,11 +9,9 @@ import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.example.recipesearch.Entities.Recipe;
-import com.example.recipesearch.R;
 import com.example.recipesearch.Utilities.Parser;
 import com.example.recipesearch.databinding.ActivityRecipeDetailBinding;
 import com.google.android.material.chip.Chip;
-import com.google.gson.Gson;
 
 public class RecipeDetailActivity extends AppCompatActivity {
 
@@ -37,7 +35,13 @@ public class RecipeDetailActivity extends AppCompatActivity {
         binding.mealTypeTextView.setText("Meal: "+ TextUtils.join(",", recipe.getMealType()));
         binding.dishTypeTextView.setText("Type: " + TextUtils.join(",", recipe.getDishType()));
         binding.caloriesTextView.setText("Calories: " + String.format("%.2f", recipe.getCalories()));
-
+        double totalTime = recipe.getTotalTime();
+        if(totalTime == 0 ){
+            binding.totalTimeTextView.setVisibility(View.GONE);
+        } else {
+            binding.totalTimeTextView.setVisibility(View.VISIBLE);
+            binding.totalTimeTextView.setText(recipe.getTotalTime() + "m");
+        }
 
         //Setup nutrition card views
         String[] diets = recipe.getDietLabels();
@@ -82,6 +86,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
             }
         });
 
+        String ingredients = String.join("\n", recipe.getIngredientLines());
+        binding.ingredientsTextView.setText(ingredients);
 
     }
 }

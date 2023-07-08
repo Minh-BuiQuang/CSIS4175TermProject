@@ -9,7 +9,7 @@ public class Recipe {
     private String[] dietLabels;
     private String[] healthLabels;
     private String[] cautions;
-    private String[] ingredientsLines;
+    private String[] ingredientLines;
 
     //TODO: Add ingredient class
     //private String[] ingredients;
@@ -70,8 +70,8 @@ public class Recipe {
         return cautions;
     }
 
-    public String[] getIngredientsLines() {
-        return ingredientsLines;
+    public String[] getIngredientLines() {
+        return ingredientLines;
     }
 
     public double getCalories() {

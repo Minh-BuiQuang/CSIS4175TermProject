@@ -48,6 +48,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         holder.mealTypeTextView.setText("Meal: "+ TextUtils.join(",", recipe.getMealType()));
         holder.dishTypeTextView.setText("Type: " + TextUtils.join(",", recipe.getDishType()));
         holder.caloriesTextView.setText("Calories: " + String.format("%.2f", recipe.getCalories()));
+        double totalTime = recipe.getTotalTime();
+        if(totalTime == 0 ){
+            holder.totalTimeTextView.setVisibility(View.GONE);
+        } else {
+            holder.totalTimeTextView.setVisibility(View.VISIBLE);
+            holder.totalTimeTextView.setText(recipe.getTotalTime() + "m");
+        }
         loadDietLabel(holder, recipe.getDietLabels());
 
         holder.cardView.setOnClickListener(v -> {
@@ -75,7 +82,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
         ImageView imageView;
-        TextView labelTextView, cuisineTextView, mealTypeTextView, dishTypeTextView, caloriesTextView;
+        TextView labelTextView, cuisineTextView, mealTypeTextView, dishTypeTextView, caloriesTextView, totalTimeTextView;
         ChipGroup chipGroup;
         View view;
         public ViewHolder(@NonNull View itemView) {
@@ -89,6 +96,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             caloriesTextView = view.findViewById(R.id.caloriesTextView);
             chipGroup = view.findViewById(R.id.chipGroup);
             cardView = view.findViewById(R.id.card_view);
+            totalTimeTextView = view.findViewById(R.id.totalTimeTextView);
         }
     }
 }
