@@ -1,6 +1,7 @@
 package com.example.recipesearch.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,13 +10,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.recipesearch.Activities.RecipeDetailActivity;
 import com.example.recipesearch.Entities.Recipe;
 import com.example.recipesearch.R;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -45,6 +49,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         holder.dishTypeTextView.setText("Type: " + TextUtils.join(",", recipe.getDishType()));
         holder.caloriesTextView.setText("Calories: " + String.format("%.2f", recipe.getCalories()));
         loadDietLabel(holder, recipe.getDietLabels());
+
+        holder.cardView.setOnClickListener(v -> {
+            Intent i = new Intent(context, RecipeDetailActivity.class );
+            Gson gson = new Gson();
+            i.putExtra("recipe", gson.toJson(recipe));
+            context.startActivity(i);
+        });
     }
 
     @Override
@@ -62,6 +73,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        CardView cardView;
         ImageView imageView;
         TextView labelTextView, cuisineTextView, mealTypeTextView, dishTypeTextView, caloriesTextView;
         ChipGroup chipGroup;
@@ -72,10 +84,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             imageView = view.findViewById(R.id.imageView);
             labelTextView = view.findViewById(R.id.labelTextView);
             cuisineTextView = view.findViewById(R.id.cuisineTextView);
-            mealTypeTextView = view.findViewById(R.id.mealTypeTextView);
+            mealTypeTextView = view.findViewById(R.id.cuisineTextView);
             dishTypeTextView = view.findViewById(R.id.dishTypeTextView);
             caloriesTextView = view.findViewById(R.id.caloriesTextView);
             chipGroup = view.findViewById(R.id.chipGroup);
+            cardView = view.findViewById(R.id.card_view);
         }
     }
 }

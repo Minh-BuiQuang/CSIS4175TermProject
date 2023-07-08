@@ -8,11 +8,11 @@ import com.google.gson.Gson;
 import org.json.JSONObject;
 
 public class Parser {
-    public static Recipe ParseRecipe(JSONObject json) {
+    public static Recipe ParseRecipe(String json) {
         Recipe recipe = new Recipe();
         Gson g = new Gson();
         try {
-            recipe = g.fromJson(json.getString("recipe"), Recipe.class);
+            recipe = g.fromJson(json, Recipe.class);
         } catch (Exception e) {
             Log.e("JsonParse", "Failed to parse json object");
         }

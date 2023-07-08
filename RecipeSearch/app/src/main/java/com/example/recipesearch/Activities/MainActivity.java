@@ -19,6 +19,7 @@ import com.example.recipesearch.R;
 import com.example.recipesearch.RecyclerView.RecyclerAdapter;
 import com.example.recipesearch.Utilities.Parser;
 import com.example.recipesearch.Utilities.VolleySingleton;
+import com.example.recipesearch.databinding.ActivityMainBinding;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,16 +31,17 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
+    ActivityMainBinding binding;
     private RequestQueue requestQueue;
-    private RecyclerView recyclerView;
     private ArrayList<Recipe> recipes = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
 
-        recyclerView = findViewById(R.id.recipeRecyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        setContentView(binding.getRoot());
+
+        binding.recipeRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         requestQueue = VolleySingleton.getInstance(this).getRequestQueue();
         fetchRecipe();
     }
@@ -53,13 +55,13 @@ public class MainActivity extends AppCompatActivity {
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         Log.i("JSON Response", jsonObject.toString());
-                        recipes.add(Parser.ParseRecipe(jsonObject));
+                        recipes.add(Parser.ParseRecipe(jsonObject.getString("recipe")));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 RecyclerAdapter adapter = new RecyclerAdapter(MainActivity.this, recipes);
-                recyclerView.setAdapter(adapter);
+                binding.recipeRecyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }
         }, new Response.ErrorListener() {
