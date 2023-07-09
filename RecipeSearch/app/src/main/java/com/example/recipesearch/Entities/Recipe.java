@@ -10,10 +10,6 @@ public class Recipe {
     private String[] healthLabels;
     private String[] cautions;
     private String[] ingredientLines;
-
-    //TODO: Add ingredient class
-    //private String[] ingredients;
-
     private double calories;
     private double totalCO2Emissions;
     private String co2EmissionsClass;
@@ -34,9 +30,6 @@ public class Recipe {
     public String[] getDishType() {
         return dishType;
     }
-//JSON objects
-//    private String[] totalNutrients;
-
 
     public String getUri() {
         return uri;

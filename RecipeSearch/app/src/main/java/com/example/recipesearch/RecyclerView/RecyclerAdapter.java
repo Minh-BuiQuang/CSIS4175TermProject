@@ -44,9 +44,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         Recipe recipe = recipes.get(position);
         Glide.with(context).load(recipe.getImage()).into(holder.imageView);
         holder.labelTextView.setText(recipe.getLabel());
-        holder.cuisineTextView.setText("Cuisine: " + TextUtils.join(",", recipe.getCuisineType()));
-        holder.mealTypeTextView.setText("Meal: "+ TextUtils.join(",", recipe.getMealType()));
-        holder.dishTypeTextView.setText("Type: " + TextUtils.join(",", recipe.getDishType()));
+        if(recipe.getCuisineType() != null)
+            holder.cuisineTextView.setText("Cuisine: " + TextUtils.join(",", recipe.getCuisineType()));
+        if(recipe.getMealType() != null)
+            holder.mealTypeTextView.setText("Meal: "+ TextUtils.join(",", recipe.getMealType()));
+        if(recipe.getDishType() != null)
+            holder.dishTypeTextView.setText("Type: " + TextUtils.join(",", recipe.getDishType()));
         holder.caloriesTextView.setText("Calories: " + String.format("%.2f", recipe.getCalories()));
         double totalTime = recipe.getTotalTime();
         if(totalTime == 0 ){
@@ -91,7 +94,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             imageView = view.findViewById(R.id.imageView);
             labelTextView = view.findViewById(R.id.labelTextView);
             cuisineTextView = view.findViewById(R.id.cuisineTextView);
-            mealTypeTextView = view.findViewById(R.id.cuisineTextView);
+            mealTypeTextView = view.findViewById(R.id.mealTypeTextView);
             dishTypeTextView = view.findViewById(R.id.dishTypeTextView);
             caloriesTextView = view.findViewById(R.id.caloriesTextView);
             chipGroup = view.findViewById(R.id.chipGroup);

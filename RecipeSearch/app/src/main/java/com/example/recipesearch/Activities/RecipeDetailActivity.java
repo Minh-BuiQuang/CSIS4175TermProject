@@ -3,6 +3,7 @@ package com.example.recipesearch.Activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -31,9 +32,12 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private void bindData() {
         binding.recipeLabelTextView.setText(recipe.getLabel());
         Glide.with(this).load(recipe.getImage()).into(binding.recipeImageView);
-        binding.cuisineTextView.setText("Cuisine: " + TextUtils.join(",", recipe.getCuisineType()));
-        binding.mealTypeTextView.setText("Meal: "+ TextUtils.join(",", recipe.getMealType()));
-        binding.dishTypeTextView.setText("Type: " + TextUtils.join(",", recipe.getDishType()));
+        if(recipe.getCuisineType() != null)
+            binding.cuisineTextView.setText("Cuisine: " + TextUtils.join(",", recipe.getCuisineType()));
+        if(recipe.getMealType() != null)
+            binding.mealTypeTextView.setText("Meal: "+ TextUtils.join(",", recipe.getMealType()));
+        if(recipe.getDishType() != null)
+            binding.dishTypeTextView.setText("Type: " + TextUtils.join(",", recipe.getDishType()));
         binding.caloriesTextView.setText("Calories: " + String.format("%.2f", recipe.getCalories()));
         double totalTime = recipe.getTotalTime();
         if(totalTime == 0 ){
@@ -89,5 +93,10 @@ public class RecipeDetailActivity extends AppCompatActivity {
         String ingredients = String.join("\n", recipe.getIngredientLines());
         binding.ingredientsTextView.setText(ingredients);
 
+        binding.instructionButton.setOnClickListener(v -> {
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(recipe.getUrl()));
+            startActivity(i);
+        });
     }
 }
