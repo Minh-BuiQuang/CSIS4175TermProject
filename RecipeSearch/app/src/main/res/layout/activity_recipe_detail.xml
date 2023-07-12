@@ -79,17 +79,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dishTypeTextView"
             android:textSize="16sp" />
+
         <TextView
             android:id="@+id/totalTimeTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:drawableLeft="@drawable/timer"
             android:gravity="center_vertical"
             android:textSize="16sp"
             app:layout_constraintEnd_toStartOf="@+id/recipeImageView"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/favouriteButton"
             app:layout_constraintTop_toBottomOf="@+id/caloriesTextView" />
 
         <Button
@@ -99,7 +99,7 @@
             android:layout_marginStart="10dp"
             android:text="View instruction"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/totalTimeTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/favouriteButton" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/dietsCardView"
@@ -224,6 +224,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <ToggleButton
+            android:id="@+id/favouriteButton"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/favourite_state"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:textOff=""
+            android:textOn=""
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/caloriesTextView"             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

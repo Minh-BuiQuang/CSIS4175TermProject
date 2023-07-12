@@ -6,21 +6,27 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.recipesearch.Activities.RecipeDetailActivity;
 import com.example.recipesearch.Entities.Recipe;
 import com.example.recipesearch.R;
+import com.example.recipesearch.Utilities.DBHandler;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
@@ -66,6 +72,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             i.putExtra("recipe", gson.toJson(recipe));
             context.startActivity(i);
         });
+
+        DBHandler db = new DBHandler(context);
+        ArrayList<String> uris = db.getRecipeUris();
+        String uri = recipe.getUri();
+        if(uris.contains(uri)) {
+            holder.favouriteButton.setChecked(true);
+        }
+        holder.favouriteButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked) db.addRecipe(uri);
+            else db.removeRecipe(uri);
+        });
     }
 
     @Override
@@ -87,6 +104,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         ImageView imageView;
         TextView labelTextView, cuisineTextView, mealTypeTextView, dishTypeTextView, caloriesTextView, totalTimeTextView;
         ChipGroup chipGroup;
+        ToggleButton favouriteButton;
         View view;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -100,6 +118,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             chipGroup = view.findViewById(R.id.chipGroup);
             cardView = view.findViewById(R.id.card_view);
             totalTimeTextView = view.findViewById(R.id.totalTimeTextView);
+            favouriteButton = view.findViewById(R.id.favouriteButton);
+
         }
     }
 }

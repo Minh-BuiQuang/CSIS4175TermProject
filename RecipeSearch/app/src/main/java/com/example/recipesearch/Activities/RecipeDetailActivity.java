@@ -10,9 +10,12 @@ import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.example.recipesearch.Entities.Recipe;
+import com.example.recipesearch.Utilities.DBHandler;
 import com.example.recipesearch.Utilities.Parser;
 import com.example.recipesearch.databinding.ActivityRecipeDetailBinding;
 import com.google.android.material.chip.Chip;
+
+import java.util.ArrayList;
 
 public class RecipeDetailActivity extends AppCompatActivity {
 
@@ -97,6 +100,16 @@ public class RecipeDetailActivity extends AppCompatActivity {
             Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(recipe.getUrl()));
             startActivity(i);
+        });
+        DBHandler db = new DBHandler(this);
+        ArrayList<String> uris = db.getRecipeUris();
+        String uri = recipe.getUri();
+        if(uris.contains(uri)) {
+            binding.favouriteButton.setChecked(true);
+        }
+        binding.favouriteButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked) db.addRecipe(uri);
+            else db.removeRecipe(uri);
         });
     }
 }

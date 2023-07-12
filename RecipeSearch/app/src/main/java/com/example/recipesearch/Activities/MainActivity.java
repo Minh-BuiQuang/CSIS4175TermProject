@@ -5,9 +5,13 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -68,8 +72,8 @@ public class MainActivity extends AppCompatActivity {
                 binding.filterConstraintLayout.setVisibility(View.GONE);
             }
         });
-    }
 
+    }
     private void prepareSearchOptions() {
         String[] diets = {"balanced","high-fiber","high-protein", "low-carb", "low-fat", "low-sodium" };
         String[] health = {"alcohol-cocktail","alcohol-free","celery-free","crustacean-free","dairy-free","DASH","egg-free","fish-free",
@@ -222,4 +226,23 @@ public class MainActivity extends AppCompatActivity {
         };
         requestQueue.add(jsonObjectRequest);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.favourite:
+                startActivity(new Intent(this, FavouriteActivity.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 }
