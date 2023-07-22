@@ -9,16 +9,16 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.recipesearch.Activities.RecipeDetailActivity;
+import com.example.recipesearch.Entities.Ingredient;
 import com.example.recipesearch.Entities.Recipe;
 import com.example.recipesearch.R;
 import com.example.recipesearch.Utilities.DBHandler;
@@ -29,18 +29,18 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
+public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecipeRecyclerAdapter.ViewHolder> {
     Context context;
     List<Recipe> recipes;
 
-    public RecyclerAdapter(Context context, List<Recipe> recipes) {
+    public RecipeRecyclerAdapter(Context context, List<Recipe> recipes) {
         this.context = context;
         this.recipes = recipes;
     }
 
     @NonNull
     @Override
-    public RecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecipeRecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.recipe, parent, false);
         return new ViewHolder(view);
     }
@@ -75,13 +75,24 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
         DBHandler db = new DBHandler(context);
         ArrayList<String> uris = db.getRecipeUris();
+        db.close();
         String uri = recipe.getUri();
         if(uris.contains(uri)) {
             holder.favouriteButton.setChecked(true);
         }
         holder.favouriteButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if(isChecked) db.addRecipe(uri);
-            else db.removeRecipe(uri);
+            DBHandler dbHandler = new DBHandler(context);
+            if(isChecked) dbHandler.addRecipe(uri);
+            else dbHandler.removeRecipe(uri);
+            dbHandler.close();
+        });
+        holder.addToCartButton.setOnClickListener(v -> {
+            DBHandler dbHandler = new DBHandler(context);
+            for (Ingredient i : recipe.getIngredients()) {
+                dbHandler.addOrUpdateIngredient(i);
+            }
+            dbHandler.close();
+            Toast.makeText(context, "Ingredients have been added to grocery list", Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -105,6 +116,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         TextView labelTextView, cuisineTextView, mealTypeTextView, dishTypeTextView, caloriesTextView, totalTimeTextView;
         ChipGroup chipGroup;
         ToggleButton favouriteButton;
+        ImageButton addToCartButton;
         View view;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -119,7 +131,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             cardView = view.findViewById(R.id.card_view);
             totalTimeTextView = view.findViewById(R.id.totalTimeTextView);
             favouriteButton = view.findViewById(R.id.favouriteButton);
-
+            addToCartButton = view.findViewById(R.id.addToCartButton);
         }
     }
 }

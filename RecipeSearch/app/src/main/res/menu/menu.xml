@@ -6,4 +6,10 @@
         android:icon="@android:drawable/btn_star_big_on"
         android:title="My Favourite"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/grocery"
+        android:icon="@drawable/cart_go_to"
+        android:title="Grocery"
+        app:showAsAction="always"
+        android:iconTint="@color/white"/>
 </menu>

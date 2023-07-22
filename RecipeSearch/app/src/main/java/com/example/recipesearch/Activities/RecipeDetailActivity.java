@@ -7,8 +7,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.recipesearch.Entities.Ingredient;
 import com.example.recipesearch.Entities.Recipe;
 import com.example.recipesearch.Utilities.DBHandler;
 import com.example.recipesearch.Utilities.Parser;
@@ -103,13 +105,25 @@ public class RecipeDetailActivity extends AppCompatActivity {
         });
         DBHandler db = new DBHandler(this);
         ArrayList<String> uris = db.getRecipeUris();
+        db.close();
         String uri = recipe.getUri();
         if(uris.contains(uri)) {
             binding.favouriteButton.setChecked(true);
         }
         binding.favouriteButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if(isChecked) db.addRecipe(uri);
-            else db.removeRecipe(uri);
+            DBHandler dbHandler = new DBHandler(this);
+            if(isChecked) dbHandler.addRecipe(uri);
+            else dbHandler.removeRecipe(uri);
+            dbHandler.close();
         });
+        binding.addToCartButton.setOnClickListener(v ->  {
+            DBHandler dbHandler = new DBHandler(this);
+            for (Ingredient i : recipe.getIngredients()) {
+                dbHandler.addOrUpdateIngredient(i);
+            }
+            dbHandler.close();
+            Toast.makeText(this, "Ingredients have been added to grocery list", Toast.LENGTH_SHORT).show();
+        });
+
     }
 }

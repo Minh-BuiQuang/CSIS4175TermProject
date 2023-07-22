@@ -15,8 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.recipesearch.Entities.Recipe;
-import com.example.recipesearch.R;
-import com.example.recipesearch.RecyclerView.RecyclerAdapter;
+import com.example.recipesearch.RecyclerView.RecipeRecyclerAdapter;
 import com.example.recipesearch.Utilities.DBHandler;
 import com.example.recipesearch.Utilities.Parser;
 import com.example.recipesearch.Utilities.VolleySingleton;
@@ -77,7 +76,7 @@ public class FavouriteActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    RecyclerAdapter adapter = new RecyclerAdapter(FavouriteActivity.this, recipes);
+                    RecipeRecyclerAdapter adapter = new RecipeRecyclerAdapter(FavouriteActivity.this, recipes);
                     binding.favouriteRecyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                 }

@@ -25,7 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.recipesearch.Entities.Recipe;
 import com.example.recipesearch.R;
-import com.example.recipesearch.RecyclerView.RecyclerAdapter;
+import com.example.recipesearch.RecyclerView.RecipeRecyclerAdapter;
 import com.example.recipesearch.Utilities.Parser;
 import com.example.recipesearch.Utilities.VolleySingleton;
 import com.example.recipesearch.databinding.ActivityMainBinding;
@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                RecyclerAdapter adapter = new RecyclerAdapter(MainActivity.this, recipes);
+                RecipeRecyclerAdapter adapter = new RecipeRecyclerAdapter(MainActivity.this, recipes);
                 binding.recipeRecyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }
@@ -239,6 +239,9 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.favourite:
                 startActivity(new Intent(this, FavouriteActivity.class));
+                return true;
+            case R.id.grocery:
+                startActivity(new Intent(this, GroceryActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

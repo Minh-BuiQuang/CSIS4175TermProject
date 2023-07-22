@@ -10,6 +10,8 @@ public class Recipe {
     private String[] healthLabels;
     private String[] cautions;
     private String[] ingredientLines;
+
+    private Ingredient[] ingredients;
     private double calories;
     private double totalCO2Emissions;
     private String co2EmissionsClass;
@@ -65,6 +67,10 @@ public class Recipe {
 
     public String[] getIngredientLines() {
         return ingredientLines;
+    }
+
+    public Ingredient[] getIngredients() {
+        return ingredients;
     }
 
     public double getCalories() {
