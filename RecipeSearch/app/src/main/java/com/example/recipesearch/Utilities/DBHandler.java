@@ -6,13 +6,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
+import com.example.recipesearch.Entities.Filter;
 import com.example.recipesearch.Entities.Ingredient;
-import com.example.recipesearch.Entities.Recipe;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class DBHandler extends SQLiteOpenHelper {
     private static final String DB_NAME = "recipedb";
@@ -25,6 +26,19 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String QUANTITY_COL = "quantity";
     private static final String MEASURE_COL = "measure";
     private static final String FOOD_ID_COL = "foodId";
+
+    private static final String FILTER_TABLE_NAME = "filter";
+    private static final String FILTER_ID_COL = "id";
+    private static final String NAME_COL = "name";
+    private static final String KEYWORD_COL = "keyword";
+    private static final String MIN_CAL_COL = "minCal";
+    private static final String MAX_CAL_COL = "maxCal";
+    private static final String DIETS_COL = "diets";
+    private static final String HEALTH_COL = "health";
+    private static final String CUISINES_COL = "cuisines";
+    private static final String MEAL_COL = "meal";
+    private static final String DISH_COL = "dish";
+
 
 
     public DBHandler(Context context) {
@@ -42,6 +56,18 @@ public class DBHandler extends SQLiteOpenHelper {
                 + QUANTITY_COL + " NUMBER,"
                 + MEASURE_COL + " TEXT)";
         db.execSQL(createIngredientTable);
+        String createFilterTable = "CREATE TABLE " + FILTER_TABLE_NAME + " ("
+                + FILTER_ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + NAME_COL + " TEXT, "
+                + KEYWORD_COL + " TEXT, "
+                + MIN_CAL_COL + " NUMBER,"
+                + MAX_CAL_COL + " NUMBER,"
+                + DIETS_COL + " TEXT,"
+                + HEALTH_COL + " TEXT,"
+                + CUISINES_COL + " TEXT,"
+                + MEAL_COL + " TEXT,"
+                + DISH_COL + " TEXT)";
+        db.execSQL(createFilterTable);
     }
 
     @Override
@@ -127,6 +153,100 @@ public class DBHandler extends SQLiteOpenHelper {
         String selection = FOOD_ID_COL + "=?";
         String[] selectionArgs = {String.valueOf(ingredient.getFoodId())};
         db.delete(INGREDIENT_TABLE_NAME, selection, selectionArgs);
+        db.close();
+    }
+
+    @SuppressLint("Range")
+    public ArrayList<Filter> getFilters(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ArrayList<Filter> filters = new ArrayList<>();
+        Cursor c = db.query(FILTER_TABLE_NAME, null, null, null, null ,null , null);
+        if(c.moveToFirst()) {
+            do {
+                Filter f = new Filter();
+                f.setId(c.getInt(c.getColumnIndex(FILTER_ID_COL)));
+                f.setName(c.getString(c.getColumnIndex(NAME_COL)));
+                f.setKeyword(c.getString(c.getColumnIndex(KEYWORD_COL)));
+                f.setMinCalories(c.getInt(c.getColumnIndex(MIN_CAL_COL)));
+                f.setMaxCalories(c.getInt(c.getColumnIndex(MAX_CAL_COL)));
+                try{
+                    JSONArray diets = new JSONArray(c.getString(c.getColumnIndex(DIETS_COL)));
+                    String[] dietArray = new String[diets.length()];
+                    for (int i = 0; i < diets.length(); i++) {
+                        dietArray[i] = diets.getString(i);
+                    }
+                    f.setDiets(dietArray);
+
+                    JSONArray allergies = new JSONArray(c.getString(c.getColumnIndex(HEALTH_COL)));
+                    String[] allergyArray = new String[allergies.length()];
+                    for (int i = 0; i < allergies.length(); i++) {
+                        allergyArray[i] = allergies.getString(i);
+                    }
+                    f.setAllergies(allergyArray);
+
+                    JSONArray cuisines = new JSONArray(c.getString(c.getColumnIndex(CUISINES_COL)));
+                    String[] cuisineArray = new String[cuisines.length()];
+                    for (int i = 0; i < cuisines.length(); i++) {
+                        cuisineArray[i] = cuisines.getString(i);
+                    }
+                    f.setCuisines(cuisineArray);
+
+                    JSONArray mealTypes = new JSONArray(c.getString(c.getColumnIndex(MEAL_COL)));
+                    String[] mealArray = new String[mealTypes.length()];
+                    for (int i = 0; i < mealTypes.length(); i++) {
+                        mealArray[i] = mealTypes.getString(i);
+                    }
+                    f.setMealTypes(mealArray);
+
+                    JSONArray dishTypes = new JSONArray(c.getString(c.getColumnIndex(DISH_COL)));
+                    String[] dishArray = new String[dishTypes.length()];
+                    for (int i = 0; i < dishTypes.length(); i++) {
+                        dishArray[i] = dishTypes.getString(i);
+                    }
+                    f.setDishTypes(dishArray);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                filters.add(f);
+            } while (c.moveToNext());
+            c.close();
+        }
+        db.close();
+        return filters;
+    }
+
+    public boolean addFilter(Filter filter) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(NAME_COL, filter.getName());
+        values.put(KEYWORD_COL, filter.getKeyword());
+        values.put(MIN_CAL_COL, filter.getMinCalories());
+        values.put(MAX_CAL_COL, filter.getMaxCalories());
+        try {
+            JSONArray diets = new JSONArray(filter.getDiets());
+            values.put(DIETS_COL, diets.toString());
+            JSONArray allergies = new JSONArray(filter.getAllergies());
+            values.put(HEALTH_COL, allergies.toString());
+            JSONArray cuisines = new JSONArray(filter.getCuisines());
+            values.put(CUISINES_COL, cuisines.toString());
+            JSONArray mealTypes = new JSONArray(filter.getMealTypes());
+            values.put(MEAL_COL, mealTypes.toString());
+            JSONArray dishTypes = new JSONArray(filter.getDishTypes());
+            values.put(DISH_COL, dishTypes.toString());
+            db.insert(FILTER_TABLE_NAME, null, values);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public void removeFilter(String filterName){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String selection = NAME_COL + "=?";
+        String[] selectionArgs = {filterName};
+        db.delete(FILTER_TABLE_NAME, selection, selectionArgs);
         db.close();
     }
 }

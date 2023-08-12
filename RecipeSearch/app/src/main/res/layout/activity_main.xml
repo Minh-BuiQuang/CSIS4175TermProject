@@ -85,7 +85,27 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView3">
 
                     <TextView
-                        android:id="@+id/textView2"
+                        android:id="@+id/presetTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Diets"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/caloriesRangeSlider"
+                        tools:layout_conversion_absoluteHeight="19dp"
+                        tools:layout_conversion_absoluteWidth="393dp" />
+
+                    <TextView
+                        android:id="@+id/textView12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Saved Search"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:layout_conversion_absoluteHeight="19dp"
+                        tools:layout_conversion_absoluteWidth="393dp" />
+
+                    <TextView
+                        android:id="@+id/textView11"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Diets"
@@ -149,7 +169,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView2"
+                        app:layout_constraintTop_toBottomOf="@+id/presetTextView"
                         tools:layout_conversion_absoluteHeight="0dp"
                         tools:layout_conversion_absoluteWidth="393dp">
 
@@ -201,17 +221,36 @@
 
                     <com.google.android.material.slider.RangeSlider
                         android:id="@+id/caloriesRangeSlider"
-                        android:layout_marginStart="20dp"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:stepSize="100.0"
                         android:valueFrom="0.0"
                         android:valueTo="5000.0"
                         app:labelBehavior="floating"
-                        android:stepSize="100.0"
-                        app:values="@array/initial_slider_values"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/textView10"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@+id/savedSearchChipGroup"
+                        app:values="@array/initial_slider_values" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/savedSearchChipGroup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/saveButton">
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                    <ImageButton
+                        android:id="@+id/saveButton"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@color/green"
+                        android:src="@android:drawable/ic_menu_save"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/white" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
